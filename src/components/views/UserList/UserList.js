@@ -28,7 +28,6 @@ class Component extends React.Component {
   }
   render() {
     const { users, className } = this.props;
-    console.log('users', users);
 
     return (
       <div className={clsx(className, styles.root)}>
