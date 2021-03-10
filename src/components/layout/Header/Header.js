@@ -16,7 +16,6 @@ const Component = ({ className }) => (
 
 Component.propTypes = {
   className: PropTypes.string,
-  user: PropTypes.object,
 };
 
 export {

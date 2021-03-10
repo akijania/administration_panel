@@ -1,21 +1,21 @@
-/* eslint-disable quotes */
-import React from "react";
-import PropTypes from "prop-types";
-import clsx from "clsx";
-import { connect } from "react-redux";
-import { getAllUsers, fetchPublishedUsers } from "../../../redux/usersRedux";
-import styles from "./UserList.module.scss";
-import Paper from "@material-ui/core/Paper";
-import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
-import { withStyles } from "@material-ui/core/styles";
-import orange from "material-ui/colors/orange";
+import React from 'react';
+import PropTypes from 'prop-types';
+import clsx from 'clsx';
+import { connect } from 'react-redux';
+import { getAllUsers, fetchPublishedUsers } from '../../../redux/usersRedux';
+import { Link } from 'react-router-dom';
+import styles from './UserList.module.scss';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles';
+import orange from 'material-ui/colors/orange';
 
 const ColorButton = withStyles((theme) => ({
   root: {
     color: theme.palette.getContrastText(orange[500]),
     backgroundColor: orange[500],
-    "&:hover": {
+    '&:hover': {
       backgroundColor: orange[700],
     },
   },
@@ -28,7 +28,7 @@ class Component extends React.Component {
   }
   render() {
     const { users, className } = this.props;
-    console.log("users", users);
+    console.log('users', users);
 
     return (
       <div className={clsx(className, styles.root)}>
@@ -44,9 +44,11 @@ class Component extends React.Component {
               <p>User List</p>
             </Grid>
             <Grid item xs={2} className={styles.addNew}>
-              <Button variant="contained" color="primary">
-                Add new
-              </Button>
+              <Link to="/form">
+                <Button variant="contained" color="primary">
+                  <p className={styles.btn}>add new</p>
+                </Button>
+              </Link>
             </Grid>
           </Grid>
           <Grid
@@ -103,12 +105,12 @@ class Component extends React.Component {
                 </Grid>
                 <Grid item xs>
                   <ColorButton variant="contained" color="primary">
-                      edit
+                    <p className={styles.btn}>edit</p>
                   </ColorButton>
                 </Grid>
                 <Grid item xs>
                   <Button variant="contained" color="secondary">
-                    delete
+                    <p className={styles.btn}>delete</p>
                   </Button>
                 </Grid>
               </Grid>
