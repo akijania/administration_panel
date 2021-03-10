@@ -47,16 +47,18 @@ export const fetchPublishedUsers = () => {
   };
 };
 export const addUserRequest = (data) => {
+  console.log(data);
   return async (dispatch) => {
     dispatch(fetchStarted({ name: 'ADD_USER' }));
     try {
       await Axios.post(
         `https://my-json-server.typicode.com/karolkproexe/jsonplaceholderdb/data`,
         data
-      ).then((res) => {
-        dispatch(addUser(res.data));
-        dispatch(fetchSuccess({ name: 'ADD_USER' }));
-      });
+      )
+        .then((res) => {
+          dispatch(addUser(data));
+          dispatch(fetchSuccess({ name: 'ADD_USER' }));
+        });
     } catch (err) {
       dispatch(fetchError({ name: 'ADD_USER', error: err.message || true }));
     }
