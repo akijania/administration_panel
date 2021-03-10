@@ -5,7 +5,7 @@
 }
 
 .paper {
-    padding: 20px;
+  padding: 20px;
 }
 
 .title {
@@ -17,8 +17,21 @@
 }
 
 .table {
-    padding: 50px 0;
-    border: 1px solid gray;
-    text-align: center;
-    background-color: rgb(230, 230, 230);
+  padding: 50px 0;
+  border: 1px solid gray;
+  text-align: center;
+  background-color: rgb(230, 230, 230);
+}
+
+.tableContent {
+  padding: 50px 0;
+  font-size: 14px;
+  border-bottom: 1px solid gray;
+  border-right: 1px solid gray;
+  border-left: 1px solid gray;
+  text-align: center;
+}
+
+.editButton {
+    color: #ff9800;
 }
