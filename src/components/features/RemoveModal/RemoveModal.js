@@ -5,27 +5,42 @@ import clsx from 'clsx';
 // import { getAllUsers, fetchPublishedUsers } from '../../../redux/usersRedux';
 import styles from './RemoveModal.module.scss';
 import Button from '@material-ui/core/Button';
-import { withStyles } from '@material-ui/core/styles';
-import orange from 'material-ui/colors/orange';
 
-const ColorButton = withStyles((theme) => ({
-  root: {
-    color: theme.palette.getContrastText(orange[500]),
-    backgroundColor: orange[500],
-    '&:hover': {
-      backgroundColor: orange[700],
-    },
-  },
-}))(Button);
 
 class Component extends React.Component {
+  state = {
+    openModal: false,
+  };
+  handleOpenModal = () => {
+    this.setState({
+      openModal: true,
+    });
+  };
+  handleCloseModal = () => {
+    this.setState({
+      openModal: false,
+    });
+  };
   render() {
     const { className, id } = this.props;
+    const { openModal } = this.state;
 
     return (
       <div className={clsx(className, styles.root)}>
-        <div className={styles.overlay} id="overlay">
-          <div className={styles.modal} id="myModal">
+        <div
+          className={
+            openModal
+              ? `${styles.overlay} ${styles.overlay_show}`
+              : styles.overlay
+          }
+          id="overlay"
+        >
+          <div
+            className={
+              openModal ? `${styles.modal} ${styles.modal_show}` : styles.modal
+            }
+            id="myModal"
+          >
             <h3>Delete</h3>
             <div className={styles.modalContent}>
               <div className={styles.line}></div>
@@ -33,7 +48,7 @@ class Component extends React.Component {
               <div className={styles.line}></div>
             </div>
             <div className={styles.buttons}>
-              <Button variant="contained" className={styles.buttonCancel}>
+              <Button variant="contained" className={styles.buttonCancel} onClick={() => this.handleCloseModal()}>
                 <p className={styles.btn}>cancel</p>
               </Button>
               <Button variant="contained" color="secondary">
@@ -42,9 +57,10 @@ class Component extends React.Component {
             </div>
           </div>
         </div>
-        <ColorButton variant="contained" color="primary">
-          <p className={styles.btn}>edit</p>
-        </ColorButton>
+        <Button variant="contained" color="secondary"
+          onClick={() => this.handleOpenModal()} >
+          <p className={styles.btn}>delete</p>
+        </Button>
       </div>
     );
   }
@@ -52,7 +68,7 @@ class Component extends React.Component {
 
 Component.propTypes = {
   className: PropTypes.string,
-  id: PropTypes.string,
+  id: PropTypes.number,
 };
 
 // const mapStateToProps = (state) => ({

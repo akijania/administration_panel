@@ -9,7 +9,18 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import { RemoveModal } from '../../features/RemoveModal/RemoveModal';
+import { withStyles } from '@material-ui/core/styles';
+import orange from 'material-ui/colors/orange';
 
+const ColorButton = withStyles((theme) => ({
+  root: {
+    color: theme.palette.getContrastText(orange[500]),
+    backgroundColor: orange[500],
+    '&:hover': {
+      backgroundColor: orange[700],
+    },
+  },
+}))(Button);
 
 class Component extends React.Component {
   componentDidMount() {
@@ -93,12 +104,15 @@ class Component extends React.Component {
                   {item.address && item.address.city}
                 </Grid>
                 <Grid item xs>
-                  <RemoveModal id={item.id}/>
+                  <ColorButton
+                    variant="contained"
+                    color="primary"
+                  >
+                    <p className={styles.btn}>edit</p>
+                  </ColorButton>
                 </Grid>
                 <Grid item xs>
-                  <Button variant="contained" color="secondary">
-                    <p className={styles.btn}>delete</p>
-                  </Button>
+                  <RemoveModal id={item.id}/>
                 </Grid>
               </Grid>
             ))}
