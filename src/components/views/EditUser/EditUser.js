@@ -74,11 +74,15 @@ class Component extends React.Component {
         city: city,
       },
     };
-    editUserRequest(data);
-    this.setState({
-      redirect: true,
-    });
-  }
+    if (data.id && data.name && data.email){
+      editUserRequest(data);
+      this.setState({
+        redirect: true,
+      });
+    } else {
+      prompt('Name and email can not be empty');
+    }
+  } 
   render() {
     const { className } = this.props;
     const { name, username, email, city } = this.state;
@@ -125,7 +129,6 @@ class Component extends React.Component {
                     <input
                       type="text"
                       name="username"
-                      required
                       value={username}
                       onChange={(event) => this.handleChangeUsername(event)}
                     />
@@ -163,7 +166,6 @@ class Component extends React.Component {
                     <input
                       type="text"
                       name="city"
-                      required
                       value={city}
                       onChange={(event) => this.handleChangeCity(event)}
                     />
