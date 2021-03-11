@@ -37,21 +37,24 @@ class Component extends React.Component {
     const { name, email } = this.state;
     const { addUserRequest } = this.props;
     const user = {
-      id: Math.floor(Math.random()*10000),
+      id: Math.floor(Math.random() * 10000),
       name: name,
       email: email,
     };
     event.preventDefault();
-    addUserRequest(user);
-    this.setState({
-      redirect: true,
-    });
+    if (user.id && user.name && user.email) {
+      addUserRequest(user);
+      this.setState({
+        redirect: true,
+      });
+    } else {
+      prompt('Name and email can not be empty');
+    }
   }
 
   render() {
     const { className } = this.props;
-    if (this.state.redirect) 
-      return <Redirect to='/' />;
+    if (this.state.redirect) return <Redirect to="/" />;
     else
       return (
         <div className={clsx(className, styles.root)}>
@@ -68,7 +71,7 @@ class Component extends React.Component {
                   className={styles.form}
                 >
                   <Grid item xs={5}>
-                  Name
+                    Name
                   </Grid>
                   <Grid item xs={7}>
                     <input
@@ -86,7 +89,7 @@ class Component extends React.Component {
                   className={styles.form}
                 >
                   <Grid item xs={5}>
-                  Email
+                    Email
                   </Grid>
                   <Grid item xs={7}>
                     <input

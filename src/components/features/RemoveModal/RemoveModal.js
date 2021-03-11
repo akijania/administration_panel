@@ -23,7 +23,6 @@ class Component extends React.Component {
   };
   handleRemoveUser = () => {
     const { id, removeUserRequest } = this.props;
-    console.log(id);
     removeUserRequest(id);
     this.setState({
       openModal: false,

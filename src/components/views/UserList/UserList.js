@@ -14,7 +14,6 @@ import orange from 'material-ui/colors/orange';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 
-
 const ColorButton = withStyles((theme) => ({
   root: {
     color: theme.palette.getContrastText(orange[500]),
@@ -47,7 +46,6 @@ class Component extends React.Component {
   render() {
     const { users, className } = this.props;
     const { sortType } = this.state;
-    
 
     return (
       <div className={clsx(className, styles.root)}>
@@ -83,7 +81,13 @@ class Component extends React.Component {
               Name
             </Grid>
             <Grid item xs>
-              Username <span className={styles.sort} onClick={() => this.sortUserInc()}><ArrowUpwardIcon fontSize='small' /></span> <span className={styles.sort} onClick={() => this.sortUserDesc()}><ArrowDownwardIcon fontSize='small'/></span>
+              Username
+              <span className={styles.sort} onClick={() => this.sortUserInc()}>
+                <ArrowDownwardIcon fontSize="small" />
+              </span>
+              <span className={styles.sort} onClick={() => this.sortUserDesc()}>
+                <ArrowUpwardIcon fontSize="small" />
+              </span>
             </Grid>
             <Grid item xs>
               Email
@@ -98,7 +102,9 @@ class Component extends React.Component {
               Delete
             </Grid>
           </Grid>
-          {users.length === 0 ? <p className={styles.emptyTable}>There are no users</p> :
+          {users.length === 0 ? (
+            <p className={styles.emptyTable}>There are no users</p>
+          ) : (
             users.sort(sortType).map((item) => (
               <Grid
                 key={item.id}
@@ -124,19 +130,17 @@ class Component extends React.Component {
                 </Grid>
                 <Grid item xs>
                   <Link to={`/form/${item.id}`}>
-                    <ColorButton
-                      variant="contained"
-                      color="primary"
-                    >
+                    <ColorButton variant="contained" color="primary">
                       <p className={styles.btn}>edit</p>
                     </ColorButton>
                   </Link>
                 </Grid>
                 <Grid item xs>
-                  <RemoveModal id={item.id}/>
+                  <RemoveModal id={item.id} />
                 </Grid>
               </Grid>
-            ))}
+            ))
+          )}
         </Paper>
       </div>
     );
