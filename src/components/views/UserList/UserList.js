@@ -11,6 +11,9 @@ import Button from '@material-ui/core/Button';
 import { RemoveModal } from '../../features/RemoveModal/RemoveModal';
 import { withStyles } from '@material-ui/core/styles';
 import orange from 'material-ui/colors/orange';
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+
 
 const ColorButton = withStyles((theme) => ({
   root: {
@@ -23,12 +26,28 @@ const ColorButton = withStyles((theme) => ({
 }))(Button);
 
 class Component extends React.Component {
+  state = {
+    sortType: (a, b) => a.id - b.id,
+  };
+
   componentDidMount() {
     const { fetchPublishedUsers } = this.props;
     fetchPublishedUsers();
   }
+  sortUserInc = () => {
+    this.setState({
+      sortType: (a, b) => a.username.localeCompare(b.username),
+    });
+  };
+  sortUserDesc = () => {
+    this.setState({
+      sortType: (a, b) => b.username.localeCompare(a.username),
+    });
+  };
   render() {
     const { users, className } = this.props;
+    const { sortType } = this.state;
+    
 
     return (
       <div className={clsx(className, styles.root)}>
@@ -64,7 +83,7 @@ class Component extends React.Component {
               Name
             </Grid>
             <Grid item xs>
-              Username
+              Username <span className={styles.sort} onClick={() => this.sortUserInc()}><ArrowUpwardIcon fontSize='small' /></span> <span className={styles.sort} onClick={() => this.sortUserDesc()}><ArrowDownwardIcon fontSize='small'/></span>
             </Grid>
             <Grid item xs>
               Email
@@ -80,7 +99,7 @@ class Component extends React.Component {
             </Grid>
           </Grid>
           {users.length === 0 ? <p className={styles.emptyTable}>There are no users</p> :
-            users.map((item) => (
+            users.sort(sortType).map((item) => (
               <Grid
                 key={item.id}
                 container
