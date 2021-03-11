@@ -66,15 +66,15 @@ export const addUserRequest = (data) => {
 };
 export const removeUserRequest = (id) => {
   return async (dispatch) => {
-    dispatch(fetchStarted({ name: 'ADD_USER' }));
+    dispatch(fetchStarted({ name: 'REMOVE_USER' }));
     try {
       await Axios.delete(
-        `https://my-json-server.typicode.com/karolkproexe/jsonplaceholderdb/data`
+        `https://my-json-server.typicode.com/karolkproexe/jsonplaceholderdb/data/${id}`
       );
       dispatch(removeUser(id));
-      dispatch(fetchSuccess({ name: 'ADD_USER' }));
+      dispatch(fetchSuccess({ name: 'REMOVE_USER' }));
     } catch (err) {
-      dispatch(fetchError({ name: 'ADD_USER', error: err.message || true }));
+      dispatch(fetchError({ name: 'REMOVE_USER', error: err.message || true }));
     }
   };
 };

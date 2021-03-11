@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-// import { connect } from 'react-redux';
-// import { getAllUsers, fetchPublishedUsers } from '../../../redux/usersRedux';
+import { connect } from 'react-redux';
+import { removeUserRequest } from '../../../redux/usersRedux';
 import styles from './RemoveModal.module.scss';
 import Button from '@material-ui/core/Button';
 
@@ -21,8 +21,16 @@ class Component extends React.Component {
       openModal: false,
     });
   };
+  handleRemoveUser = () => {
+    const { id, removeUserRequest } = this.props;
+    console.log(id);
+    removeUserRequest(id);
+    this.setState({
+      openModal: false,
+    });
+  };
   render() {
-    const { className, id } = this.props;
+    const { className } = this.props;
     const { openModal } = this.state;
 
     return (
@@ -51,7 +59,7 @@ class Component extends React.Component {
               <Button variant="contained" className={styles.buttonCancel} onClick={() => this.handleCloseModal()}>
                 <p className={styles.btn}>cancel</p>
               </Button>
-              <Button variant="contained" color="secondary">
+              <Button variant="contained" color="secondary" onClick={() => this.handleRemoveUser()} >
                 <p className={styles.btn}>delete</p>
               </Button>
             </div>
@@ -69,16 +77,13 @@ class Component extends React.Component {
 Component.propTypes = {
   className: PropTypes.string,
   id: PropTypes.number,
+  removeUserRequest: PropTypes.func,
 };
 
-// const mapStateToProps = (state) => ({
-//   users: getAllUsers(state),
-// });
+const mapDispatchToProps = (dispatch) => ({
+  removeUserRequest: (id) => dispatch(removeUserRequest(id)),
+});
 
-// const mapDispatchToProps = (dispatch) => ({
-//   fetchPublishedUsers: () => dispatch(fetchPublishedUsers()),
-// });
+const Container = connect(null, mapDispatchToProps)(Component);
 
-// const Container = connect(mapStateToProps, mapDispatchToProps)(Component);
-
-export { Component as RemoveModal, Component as RemoveModalComponent };
+export { Container as RemoveModal, Component as RemoveModalComponent };
