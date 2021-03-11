@@ -131,7 +131,7 @@ class Component extends React.Component {
                 <Grid item xs>
                   <Link to={`/form/${item.id}`}>
                     <ColorButton variant="contained" color="primary">
-                      <p className={styles.btn}>edit</p>
+                      <p className={`${styles.btn} ${styles.btnSubmit}`}>edit</p>
                     </ColorButton>
                   </Link>
                 </Grid>

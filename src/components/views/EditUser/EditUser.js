@@ -9,6 +9,18 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getUserById, fetchPublishedUser, editUserRequest } from '../../../redux/usersRedux';
 import { Redirect } from 'react-router-dom';
+import { withStyles } from '@material-ui/core/styles';
+import green from 'material-ui/colors/green';
+
+const ColorButton = withStyles((theme) => ({
+  root: {
+    color: theme.palette.getContrastText(green[500]),
+    backgroundColor: green[500],
+    '&:hover': {
+      backgroundColor: green[700],
+    },
+  },
+}))(Button);
 
 class Component extends React.Component {
   state = {
@@ -182,9 +194,9 @@ class Component extends React.Component {
                       <p className={styles.btn}>Cancel</p>
                     </Button>
                   </Link>
-                  <Button variant="contained" color="primary" type="submit">
-                    <p className={styles.btn}>Submit</p>
-                  </Button>
+                  <ColorButton variant="contained" color="primary" type="submit">
+                    <p className={`${styles.btn} ${styles.btnSubmit}`}>Submit</p>
+                  </ColorButton>
                 </div>
               </form>
             </div>
