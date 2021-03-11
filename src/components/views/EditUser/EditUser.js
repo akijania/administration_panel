@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import styles from './EditUser.module.scss';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { getUserById, fetchPublishedUser, editUserRequest } from '../../../redux/usersRedux';
+import { getUserById, fetchPublishedUsers, editUserRequest } from '../../../redux/usersRedux';
 import { Redirect } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import green from 'material-ui/colors/green';
@@ -30,9 +30,9 @@ class Component extends React.Component {
     city: '',
     redirect: false,
   };
-  componentDidMount() {
-    const { fetchPublishedUser, user } = this.props;
-    fetchPublishedUser();
+  async componentDidMount() {
+    const { fetchPublishedUsers, user } = this.props;
+    fetchPublishedUsers();
     if (user) {
       this.setState({
         name: user.name,
@@ -75,7 +75,7 @@ class Component extends React.Component {
   }
   submitForm(event) {
     const { name, username, email, city } = this.state;
-    const {editUserRequest, user} = this.props;
+    const { editUserRequest, user } = this.props;
     event.preventDefault();
     const data = {
       id: user.id,
@@ -86,20 +86,23 @@ class Component extends React.Component {
         city: city,
       },
     };
-    if (data.id && data.name && data.email){
+    if (data.id && data.name && data.email) {
       editUserRequest(data);
       this.setState({
+        name: '',
+        username: '',
+        email: '',
+        city: '',
         redirect: true,
       });
     } else {
       prompt('Name and email can not be empty');
     }
-  } 
+  }
   render() {
     const { className } = this.props;
     const { name, username, email, city } = this.state;
-    if (this.state.redirect) 
-      return <Redirect to='/' />;
+    if (this.state.redirect) return <Redirect to="/" />;
     else
       return (
         <div className={clsx(className, styles.root)}>
@@ -116,7 +119,7 @@ class Component extends React.Component {
                   className={styles.form}
                 >
                   <Grid item xs={5}>
-                  Name
+                    Name
                   </Grid>
                   <Grid item xs={7}>
                     <input
@@ -135,7 +138,7 @@ class Component extends React.Component {
                   className={styles.form}
                 >
                   <Grid item xs={5}>
-                  Username
+                    Username
                   </Grid>
                   <Grid item xs={7}>
                     <input
@@ -153,7 +156,7 @@ class Component extends React.Component {
                   className={styles.form}
                 >
                   <Grid item xs={5}>
-                  Email
+                    Email
                   </Grid>
                   <Grid item xs={7}>
                     <input
@@ -172,7 +175,7 @@ class Component extends React.Component {
                   className={styles.form}
                 >
                   <Grid item xs={5}>
-                  City
+                    City
                   </Grid>
                   <Grid item xs={7}>
                     <input
@@ -194,8 +197,14 @@ class Component extends React.Component {
                       <p className={styles.btn}>Cancel</p>
                     </Button>
                   </Link>
-                  <ColorButton variant="contained" color="primary" type="submit">
-                    <p className={`${styles.btn} ${styles.btnSubmit}`}>Submit</p>
+                  <ColorButton
+                    variant="contained"
+                    color="primary"
+                    type="submit"
+                  >
+                    <p className={`${styles.btn} ${styles.btnSubmit}`}>
+                      Submit
+                    </p>
                   </ColorButton>
                 </div>
               </form>
@@ -211,15 +220,18 @@ Component.propTypes = {
   children: PropTypes.node,
   addUserRequest: PropTypes.func,
   user: PropTypes.object,
-  fetchPublishedUser: PropTypes.func,
+  fetchPublishedUsers: PropTypes.func,
   editUserRequest: PropTypes.func,
 };
 
-const mapStateToProps = (state) => ({
-  user: getUserById(state),
-});
-const mapDispatchToProps = (dispatch, props) => ({
-  fetchPublishedUser: () => dispatch(fetchPublishedUser(props.match.params.id)),
+const mapStateToProps = (state, props) => {
+  const user = getUserById(state, props.match.params.id);
+  return {
+    user,
+  };
+};
+const mapDispatchToProps = (dispatch) => ({
+  fetchPublishedUsers: () => dispatch(fetchPublishedUsers()),
   editUserRequest: (data) => dispatch(editUserRequest(data)),
 });
 

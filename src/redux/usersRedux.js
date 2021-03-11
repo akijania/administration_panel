@@ -2,7 +2,9 @@ import Axios from 'axios';
 
 /* selectors */
 export const getAllUsers = ({ users }) => users.data;
-export const getUserById = ({ users }) => users.user;
+export const getUserById = ({ users }, UserId) => {
+  const filtered = users.data.filter(user => user.id == UserId);
+  return filtered.length ? filtered[0] : { error: true };};
 
 /* action name creator */
 const reducerName = 'users';
@@ -14,7 +16,6 @@ const FETCH_SUCCESS = createActionName('FETCH_SUCCESS');
 const FETCH_ERROR = createActionName('FETCH_ERROR');
 
 const LOAD_USERS = createActionName('LOAD_USERS');
-const LOAD_USER = createActionName('LOAD_USER');
 const ADD_USER = createActionName('ADD_USER');
 const REMOVE_USER = createActionName('REMOVE_USER');
 const EDIT_USER = createActionName('EDIT_USER');
@@ -25,7 +26,6 @@ export const fetchSuccess = (payload) => ({ payload, type: FETCH_SUCCESS });
 export const fetchError = (payload) => ({ payload, type: FETCH_ERROR });
 
 export const loadUsers = (payload) => ({ payload, type: LOAD_USERS });
-export const loadUser = (payload) => ({ payload, type: LOAD_USER });
 export const addUser = (payload) => ({ payload, type: ADD_USER });
 export const removeUser = (payload) => ({ payload, type: REMOVE_USER });
 export const editUser = (payload) => ({ payload, type: EDIT_USER });
@@ -49,20 +49,7 @@ export const fetchPublishedUsers = () => {
       });
   };
 };
-export const fetchPublishedUser = (id) => {
-  return (dispatch, getState) => {
-    dispatch(fetchStarted({ name: 'LOAD_USER' }));
 
-    Axios.get(`https://my-json-server.typicode.com/karolkproexe/jsonplaceholderdb/data/${id}`)
-      .then((res) => {
-        dispatch(loadUser(res.data));
-        dispatch(fetchSuccess({ name: 'LOAD_USER' }));
-      })
-      .catch((err) => {
-        dispatch(fetchError({ name: 'LOAD_USER', error: err.message || true }));
-      });
-  };
-};
 export const addUserRequest = (data) => {
   return async (dispatch) => {
     dispatch(fetchStarted({ name: 'ADD_USER' }));
@@ -117,8 +104,6 @@ export const reducer = (statePart = [], action = {}) => {
   switch (action.type) {
     case LOAD_USERS:
       return { ...statePart, data: [...action.payload] };
-    case LOAD_USER:
-      return { ...statePart, user: action.payload };
     case ADD_USER:
       return { ...statePart, data: [...statePart.data, action.payload] };
     case REMOVE_USER:
