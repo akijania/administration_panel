@@ -79,7 +79,7 @@ class Component extends React.Component {
               Delete
             </Grid>
           </Grid>
-          {users &&
+          {users.length === 0 ? <p className={styles.emptyTable}>There are no users</p> :
             users.map((item) => (
               <Grid
                 key={item.id}
