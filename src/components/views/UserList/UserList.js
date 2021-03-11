@@ -8,18 +8,8 @@ import styles from './UserList.module.scss';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import { withStyles } from '@material-ui/core/styles';
-import orange from 'material-ui/colors/orange';
+import { RemoveModal } from '../../features/RemoveModal/RemoveModal';
 
-const ColorButton = withStyles((theme) => ({
-  root: {
-    color: theme.palette.getContrastText(orange[500]),
-    backgroundColor: orange[500],
-    '&:hover': {
-      backgroundColor: orange[700],
-    },
-  },
-}))(Button);
 
 class Component extends React.Component {
   componentDidMount() {
@@ -103,9 +93,7 @@ class Component extends React.Component {
                   {item.address && item.address.city}
                 </Grid>
                 <Grid item xs>
-                  <ColorButton variant="contained" color="primary">
-                    <p className={styles.btn}>edit</p>
-                  </ColorButton>
+                  <RemoveModal id={item.id}/>
                 </Grid>
                 <Grid item xs>
                   <Button variant="contained" color="secondary">

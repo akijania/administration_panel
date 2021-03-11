@@ -3,6 +3,9 @@
   margin-left: auto;
   padding: 20px 50px;
 
+  * {
+    box-sizing: border-box;
+  }
 
 .paper {
   padding: 20px;
