@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import styles from './EditUser.module.scss';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { getUserById, fetchPublishedUsers, editUserRequest } from '../../../redux/usersRedux';
+import { getUserById, fetchPublishedUser, editUserRequest } from '../../../redux/usersRedux';
 import { Redirect } from 'react-router-dom';
 
 class Component extends React.Component {
@@ -19,8 +19,8 @@ class Component extends React.Component {
     redirect: false,
   };
   componentDidMount() {
-    const { fetchPublishedUsers, user } = this.props;
-    fetchPublishedUsers();
+    const { fetchPublishedUser, user } = this.props;
+    fetchPublishedUser();
     if (user) {
       this.setState({
         name: user.name,
@@ -199,18 +199,15 @@ Component.propTypes = {
   children: PropTypes.node,
   addUserRequest: PropTypes.func,
   user: PropTypes.object,
-  fetchPublishedUsers: PropTypes.func,
+  fetchPublishedUser: PropTypes.func,
   editUserRequest: PropTypes.func,
 };
 
-const mapStateToProps = (state, props) => {
-  const user = getUserById(state, props.match.params.id);
-  return {
-    user,
-  };
-};
-const mapDispatchToProps = (dispatch) => ({
-  fetchPublishedUsers: () => dispatch(fetchPublishedUsers()),
+const mapStateToProps = (state) => ({
+  user: getUserById(state),
+});
+const mapDispatchToProps = (dispatch, props) => ({
+  fetchPublishedUser: () => dispatch(fetchPublishedUser(props.match.params.id)),
   editUserRequest: (data) => dispatch(editUserRequest(data)),
 });
 
