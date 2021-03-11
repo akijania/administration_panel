@@ -4,7 +4,8 @@ import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import  MainLayout  from './components/layout/MainLayout/MainLayout';
 import  {UserList}  from './components/views/UserList/UserList';
-import  {Form}  from './components/views/Form/Form';
+import  {AddUser}  from './components/views/AddUser/AddUser';
+import  {EditUser}  from './components/views/EditUser/EditUser';
 import  NotFound  from './components/views/PageNotFound/PageNotFound';
 import './styles/global.scss';
 
@@ -16,7 +17,8 @@ function App() {
           <MainLayout>
             <Switch>
               <Route exact path='/' component={UserList} />
-              <Route exact path='/form' component={Form} />
+              <Route exact path='/form' component={AddUser} />
+              <Route exact path='/form/:id' component={EditUser} />
               <Route path='*' component={NotFound} />
             </Switch>
           </MainLayout>

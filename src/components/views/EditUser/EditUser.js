@@ -4,20 +4,41 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import clsx from 'clsx';
-import styles from './Form.module.scss';
+import styles from './EditUser.module.scss';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { addUserRequest } from '../../../redux/usersRedux';
+import { getUserById, fetchPublishedUsers } from '../../../redux/usersRedux';
 import { v4 as uuidv4 } from 'uuid';
 
 class Component extends React.Component {
   state = {
     name: '',
+    username: '',
     email: '',
+    city: '',
+
   };
+  componentDidMount() {
+    const { fetchPublishedUsers, user } = this.props;
+    fetchPublishedUsers();
+    if (user){
+      this.setState({
+        name: user.name,
+        username: user.username,
+        email: user.email,
+        city: user.address.city,
+      });
+    }
+  }
+
   handleChangeName(event) {
     this.setState({
       name: event.target.value,
+    });
+  }
+  handleChangeUsername(event) {
+    this.setState({
+      username: event.target.value,
     });
   }
   handleChangeEmail(event) {
@@ -25,24 +46,18 @@ class Component extends React.Component {
       email: event.target.value,
     });
   }
-  submitForm(event) {
-    const { name, email } = this.state;
-    const { addUserRequest } = this.props;
-    const user = {
-      id: uuidv4(),
-      name: name,
-      email: email,
-    };
-    event.preventDefault();
-    addUserRequest(user);
+  handleChangeCity(event) {
     this.setState({
-      name: '',
-      email: '',
+      city: event.target.value,
     });
+  }
+  submitForm(event) {
+    event.preventDefault();
     window.location.replace(`/`);
   }
   render() {
     const { className } = this.props;
+    const {name, username, email, city} = this.state;
     return (
       <div className={clsx(className, styles.root)}>
         <Paper>
@@ -65,7 +80,27 @@ class Component extends React.Component {
                     type="text"
                     name="name"
                     required
+                    value={name}
                     onChange={(event) => this.handleChangeName(event)}
+                  />
+                </Grid>
+              </Grid>
+              <Grid
+                container
+                direction="row"
+                alignItems="center"
+                className={styles.form}
+              >
+                <Grid item xs={5}>
+                  Username
+                </Grid>
+                <Grid item xs={7}>
+                  <input
+                    type="text"
+                    name="username"
+                    required
+                    value={username}
+                    onChange={(event) => this.handleChangeUsername(event)}
                   />
                 </Grid>
               </Grid>
@@ -83,7 +118,27 @@ class Component extends React.Component {
                     type="email"
                     name="email"
                     required
+                    value={email}
                     onChange={(event) => this.handleChangeEmail(event)}
+                  />
+                </Grid>
+              </Grid>
+              <Grid
+                container
+                direction="row"
+                alignItems="center"
+                className={styles.form}
+              >
+                <Grid item xs={5}>
+                  City
+                </Grid>
+                <Grid item xs={7}>
+                  <input
+                    type="text"
+                    name="city"
+                    required
+                    value={city}
+                    onChange={(event) => this.handleChangeCity(event)}
                   />
                 </Grid>
               </Grid>
@@ -114,11 +169,20 @@ Component.propTypes = {
   className: PropTypes.string,
   children: PropTypes.node,
   addUserRequest: PropTypes.func,
+  user: PropTypes.object,
+  fetchPublishedUsers: PropTypes.func,
 };
 
+const mapStateToProps = (state, props) => {
+  const user = getUserById(state, props.match.params.id);
+  return {
+    user,
+  };
+};
 const mapDispatchToProps = (dispatch) => ({
-  addUserRequest: (user) => dispatch(addUserRequest(user)),
+  fetchPublishedUsers: () => dispatch(fetchPublishedUsers()),
 });
-const Container = connect(null, mapDispatchToProps)(Component);
 
-export { Container as Form, Component as UserPageComponent };
+const Container = connect(mapStateToProps, mapDispatchToProps)(Component);
+
+export { Container as EditUser, Component as UserPageComponent };

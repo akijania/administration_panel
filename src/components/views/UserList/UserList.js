@@ -123,12 +123,14 @@ class Component extends React.Component {
                   {item.address && item.address.city}
                 </Grid>
                 <Grid item xs>
-                  <ColorButton
-                    variant="contained"
-                    color="primary"
-                  >
-                    <p className={styles.btn}>edit</p>
-                  </ColorButton>
+                  <Link to={`/form/${item.id}`}>
+                    <ColorButton
+                      variant="contained"
+                      color="primary"
+                    >
+                      <p className={styles.btn}>edit</p>
+                    </ColorButton>
+                  </Link>
                 </Grid>
                 <Grid item xs>
                   <RemoveModal id={item.id}/>

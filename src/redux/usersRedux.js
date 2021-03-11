@@ -2,6 +2,7 @@ import Axios from 'axios';
 
 /* selectors */
 export const getAllUsers = ({ users }) => users.data;
+export const getUserById = ({ users }, UserId) => users.data.filter(user => user.id == UserId)[0];
 
 /* action name creator */
 const reducerName = 'users';
