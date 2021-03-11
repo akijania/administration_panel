@@ -48,7 +48,6 @@ export const fetchPublishedUsers = () => {
   };
 };
 export const addUserRequest = (data) => {
-  console.log(data);
   return async (dispatch) => {
     dispatch(fetchStarted({ name: 'ADD_USER' }));
     try {
@@ -84,10 +83,13 @@ export const editUserRequest = (data) => {
     dispatch(fetchStarted({ name: 'EDIT_USER' }));
     try {
       await Axios.put(
-        `https://my-json-server.typicode.com/karolkproexe/jsonplaceholderdb/data`,
+        `https://my-json-server.typicode.com/karolkproexe/jsonplaceholderdb/data/${data.id}`,
         data
-      );
-      dispatch(fetchSuccess({ name: 'EDIT_USER' }));
+      )
+        .then((res) => {
+          dispatch(editUser(data));
+          dispatch(fetchSuccess({ name: 'EDIT_USER' }));
+        });
     } catch (err) {
       dispatch(fetchError({ name: 'EDIT_USER', error: err.message || true }));
     }
@@ -111,7 +113,13 @@ export const reducer = (statePart = [], action = {}) => {
         if (item.id === action.payload.id) {
           return {
             ...item,
-            user: action.payload.name,
+            name: action.payload.name,
+            username: action.payload.username,
+            email: action.payload.email,
+            address: {
+              ...item.address,
+              city: action.payload.address.city,
+            },
           };
         }
         return item;

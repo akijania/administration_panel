@@ -8,13 +8,21 @@ import styles from './AddUser.module.scss';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { addUserRequest } from '../../../redux/usersRedux';
-import { v4 as uuidv4 } from 'uuid';
+import { Redirect } from 'react-router-dom';
 
 class Component extends React.Component {
   state = {
     name: '',
     email: '',
+    redirect: false,
   };
+  componentDidMount() {
+    this.setState({
+      name: '',
+      email: '',
+      redirect: false,
+    });
+  }
   handleChangeName(event) {
     this.setState({
       name: event.target.value,
@@ -29,84 +37,86 @@ class Component extends React.Component {
     const { name, email } = this.state;
     const { addUserRequest } = this.props;
     const user = {
-      id: uuidv4(),
+      id: Math.floor(Math.random()*10000),
       name: name,
       email: email,
     };
     event.preventDefault();
     addUserRequest(user);
     this.setState({
-      name: '',
-      email: '',
+      redirect: true,
     });
-    window.location.replace(`/`);
   }
+
   render() {
     const { className } = this.props;
-    return (
-      <div className={clsx(className, styles.root)}>
-        <Paper>
-          <div className={styles.title}>
-            <p>Form</p>
-          </div>
-          <div>
-            <form onSubmit={(event) => this.submitForm(event)}>
-              <Grid
-                container
-                direction="row"
-                alignItems="center"
-                className={styles.form}
-              >
-                <Grid item xs={5}>
+    if (this.state.redirect) 
+      return <Redirect to='/' />;
+    else
+      return (
+        <div className={clsx(className, styles.root)}>
+          <Paper>
+            <div className={styles.title}>
+              <p>Form</p>
+            </div>
+            <div>
+              <form onSubmit={(event) => this.submitForm(event)}>
+                <Grid
+                  container
+                  direction="row"
+                  alignItems="center"
+                  className={styles.form}
+                >
+                  <Grid item xs={5}>
                   Name
+                  </Grid>
+                  <Grid item xs={7}>
+                    <input
+                      type="text"
+                      name="name"
+                      required
+                      onChange={(event) => this.handleChangeName(event)}
+                    />
+                  </Grid>
                 </Grid>
-                <Grid item xs={7}>
-                  <input
-                    type="text"
-                    name="name"
-                    required
-                    onChange={(event) => this.handleChangeName(event)}
-                  />
-                </Grid>
-              </Grid>
-              <Grid
-                container
-                direction="row"
-                alignItems="center"
-                className={styles.form}
-              >
-                <Grid item xs={5}>
+                <Grid
+                  container
+                  direction="row"
+                  alignItems="center"
+                  className={styles.form}
+                >
+                  <Grid item xs={5}>
                   Email
+                  </Grid>
+                  <Grid item xs={7}>
+                    <input
+                      type="email"
+                      name="email"
+                      required
+                      onChange={(event) => this.handleChangeEmail(event)}
+                    />
+                  </Grid>
                 </Grid>
-                <Grid item xs={7}>
-                  <input
-                    type="email"
-                    name="email"
-                    required
-                    onChange={(event) => this.handleChangeEmail(event)}
-                  />
-                </Grid>
-              </Grid>
 
-              <div className={styles.buttons}>
-                <Link to="/">
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    className={styles.btn_cancel}
-                  >
-                    <p className={styles.btn}>Cancel</p>
+                <div className={styles.buttons}>
+                  <Link to="/">
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      className={styles.btn_cancel}
+                    >
+                      <p className={styles.btn}>Cancel</p>
+                    </Button>
+                  </Link>
+                  <Button variant="contained" color="primary" type="submit">
+                    <p className={styles.btn}>Submit</p>
                   </Button>
-                </Link>
-                <Button variant="contained" color="primary" type="submit">
-                  <p className={styles.btn}>Submit</p>
-                </Button>
-              </div>
-            </form>
-          </div>
-        </Paper>
-      </div>
-    );
+                </div>
+              </form>
+            </div>
+          </Paper>
+        </div>
+      );
   }
 }
 

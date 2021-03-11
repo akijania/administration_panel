@@ -7,8 +7,8 @@ import clsx from 'clsx';
 import styles from './EditUser.module.scss';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { getUserById, fetchPublishedUsers } from '../../../redux/usersRedux';
-import { v4 as uuidv4 } from 'uuid';
+import { getUserById, fetchPublishedUsers, editUserRequest } from '../../../redux/usersRedux';
+import { Redirect } from 'react-router-dom';
 
 class Component extends React.Component {
   state = {
@@ -16,18 +16,28 @@ class Component extends React.Component {
     username: '',
     email: '',
     city: '',
-
+    redirect: false,
   };
   componentDidMount() {
     const { fetchPublishedUsers, user } = this.props;
     fetchPublishedUsers();
-    if (user){
+    if (user) {
       this.setState({
         name: user.name,
-        username: user.username,
         email: user.email,
-        city: user.address.city,
+        redirect: false,
       });
+
+      if (user.username) {
+        this.setState({
+          username: user.username,
+        });
+      }
+      if (user.address && user.address.city) {
+        this.setState({
+          city: user.address.city,
+        });
+      }
     }
   }
 
@@ -52,116 +62,133 @@ class Component extends React.Component {
     });
   }
   submitForm(event) {
+    const { name, username, email, city } = this.state;
+    const {editUserRequest, user} = this.props;
     event.preventDefault();
-    window.location.replace(`/`);
+    const data = {
+      id: user.id,
+      name: name,
+      username: username,
+      email: email,
+      address: {
+        city: city,
+      },
+    };
+    editUserRequest(data);
+    this.setState({
+      redirect: true,
+    });
   }
   render() {
     const { className } = this.props;
-    const {name, username, email, city} = this.state;
-    return (
-      <div className={clsx(className, styles.root)}>
-        <Paper>
-          <div className={styles.title}>
-            <p>Form</p>
-          </div>
-          <div>
-            <form onSubmit={(event) => this.submitForm(event)}>
-              <Grid
-                container
-                direction="row"
-                alignItems="center"
-                className={styles.form}
-              >
-                <Grid item xs={5}>
+    const { name, username, email, city } = this.state;
+    if (this.state.redirect) 
+      return <Redirect to='/' />;
+    else
+      return (
+        <div className={clsx(className, styles.root)}>
+          <Paper>
+            <div className={styles.title}>
+              <p>Form</p>
+            </div>
+            <div>
+              <form onSubmit={(event) => this.submitForm(event)}>
+                <Grid
+                  container
+                  direction="row"
+                  alignItems="center"
+                  className={styles.form}
+                >
+                  <Grid item xs={5}>
                   Name
+                  </Grid>
+                  <Grid item xs={7}>
+                    <input
+                      type="text"
+                      name="name"
+                      required
+                      value={name}
+                      onChange={(event) => this.handleChangeName(event)}
+                    />
+                  </Grid>
                 </Grid>
-                <Grid item xs={7}>
-                  <input
-                    type="text"
-                    name="name"
-                    required
-                    value={name}
-                    onChange={(event) => this.handleChangeName(event)}
-                  />
-                </Grid>
-              </Grid>
-              <Grid
-                container
-                direction="row"
-                alignItems="center"
-                className={styles.form}
-              >
-                <Grid item xs={5}>
+                <Grid
+                  container
+                  direction="row"
+                  alignItems="center"
+                  className={styles.form}
+                >
+                  <Grid item xs={5}>
                   Username
+                  </Grid>
+                  <Grid item xs={7}>
+                    <input
+                      type="text"
+                      name="username"
+                      required
+                      value={username}
+                      onChange={(event) => this.handleChangeUsername(event)}
+                    />
+                  </Grid>
                 </Grid>
-                <Grid item xs={7}>
-                  <input
-                    type="text"
-                    name="username"
-                    required
-                    value={username}
-                    onChange={(event) => this.handleChangeUsername(event)}
-                  />
-                </Grid>
-              </Grid>
-              <Grid
-                container
-                direction="row"
-                alignItems="center"
-                className={styles.form}
-              >
-                <Grid item xs={5}>
+                <Grid
+                  container
+                  direction="row"
+                  alignItems="center"
+                  className={styles.form}
+                >
+                  <Grid item xs={5}>
                   Email
+                  </Grid>
+                  <Grid item xs={7}>
+                    <input
+                      type="email"
+                      name="email"
+                      required
+                      value={email}
+                      onChange={(event) => this.handleChangeEmail(event)}
+                    />
+                  </Grid>
                 </Grid>
-                <Grid item xs={7}>
-                  <input
-                    type="email"
-                    name="email"
-                    required
-                    value={email}
-                    onChange={(event) => this.handleChangeEmail(event)}
-                  />
-                </Grid>
-              </Grid>
-              <Grid
-                container
-                direction="row"
-                alignItems="center"
-                className={styles.form}
-              >
-                <Grid item xs={5}>
+                <Grid
+                  container
+                  direction="row"
+                  alignItems="center"
+                  className={styles.form}
+                >
+                  <Grid item xs={5}>
                   City
+                  </Grid>
+                  <Grid item xs={7}>
+                    <input
+                      type="text"
+                      name="city"
+                      required
+                      value={city}
+                      onChange={(event) => this.handleChangeCity(event)}
+                    />
+                  </Grid>
                 </Grid>
-                <Grid item xs={7}>
-                  <input
-                    type="text"
-                    name="city"
-                    required
-                    value={city}
-                    onChange={(event) => this.handleChangeCity(event)}
-                  />
-                </Grid>
-              </Grid>
 
-              <div className={styles.buttons}>
-                <Link to="/">
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    className={styles.btn_cancel}
-                  >
-                    <p className={styles.btn}>Cancel</p>
+                <div className={styles.buttons}>
+                  <Link to="/">
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      className={styles.btn_cancel}
+                    >
+                      <p className={styles.btn}>Cancel</p>
+                    </Button>
+                  </Link>
+                  <Button variant="contained" color="primary" type="submit">
+                    <p className={styles.btn}>Submit</p>
                   </Button>
-                </Link>
-                <Button variant="contained" color="primary" type="submit">
-                  <p className={styles.btn}>Submit</p>
-                </Button>
-              </div>
-            </form>
-          </div>
-        </Paper>
-      </div>
-    );
+                </div>
+              </form>
+            </div>
+          </Paper>
+        </div>
+      );
   }
 }
 
@@ -171,6 +198,7 @@ Component.propTypes = {
   addUserRequest: PropTypes.func,
   user: PropTypes.object,
   fetchPublishedUsers: PropTypes.func,
+  editUserRequest: PropTypes.func,
 };
 
 const mapStateToProps = (state, props) => {
@@ -181,6 +209,7 @@ const mapStateToProps = (state, props) => {
 };
 const mapDispatchToProps = (dispatch) => ({
   fetchPublishedUsers: () => dispatch(fetchPublishedUsers()),
+  editUserRequest: (data) => dispatch(editUserRequest(data)),
 });
 
 const Container = connect(mapStateToProps, mapDispatchToProps)(Component);
